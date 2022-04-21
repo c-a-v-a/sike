@@ -3,11 +3,17 @@ import { mainLoop } from './main';
 import { renderBoard, renderStaticBoard } from './board';
 import { findPath, clearPath } from './pathfinding'
 
+/** Type for coordinates */
 export type coords = {
   x: number,
   y: number,
 }
 
+/**
+ * Handle click interactions on board
+ * @param value value of clicked cell
+ * @param coords coordinates of clicked cell
+ */
 export function clickEvent(value: Ball|null, coords: coords) {
   if (window.canMove && window.startCoords !== null && (value === null || value.path === true)) {
     window.valueToSwap!.x = coords.x;
@@ -47,6 +53,10 @@ export function clickEvent(value: Ball|null, coords: coords) {
   }
 }
 
+/**
+ * Handle hover events
+ * @param coords coordinates of cell
+ */
 export function hoverEvent(coords: coords) {
   window.endCoords = coords;
   let cell = window.board[coords.y][coords.x]

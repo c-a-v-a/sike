@@ -2,8 +2,10 @@ import type { coords } from './events';
 import { emptyCells } from './board';
 import { BOARD_SIZE, renderStaticBoard, renderBoard } from './board';
 
+/** Type for searching function */
 type searchFunction = (coord: number, offset: number) => number;
 
+// CONSTANTS
 const COLORS = ['red', 'green', 'blue', 'purple', 'pink', 'black', 'yellow'];
 const PREDICTION_CONTAINERS = [
   document.getElementById('p1'),
@@ -14,6 +16,9 @@ const SCORE_CONTAINER = document.getElementById('score') as HTMLDivElement;
 const BALLS_CONTAINER = document.getElementById('ball-count') as HTMLDivElement;
 const BALLS_TRESHOLD = 3;
 
+/**
+ * Decorator funtction couting amount of total spawned balls
+ */
 function count(target: Object, name: string, descriptior: PropertyDescriptor) {
   let o = descriptior.value;
 
@@ -26,6 +31,7 @@ function count(target: Object, name: string, descriptior: PropertyDescriptor) {
   }
 }
 
+/** Class representing a ball */
 export class Ball {
   color: string;
   x: number;
@@ -48,20 +54,38 @@ export class Ball {
   }
 }
 
+/**
+ * Gets 3 next balls that will be spawned
+ * @returns array of those balls
+ */
 export function getPrediction(): Array<string> {
   return [randomColor(COLORS), randomColor(COLORS), randomColor(COLORS)];
 }
 
+/**
+ * Renders predicted balls into 'helper' field
+ * @param predictions array of predicted balls
+ */
 export function renderPredictions(predictions: Array<string>) {
   predictions.map((value, index) => {
     PREDICTION_CONTAINERS[index]!.style.backgroundColor = value;
   })
 }
 
+/**
+ * Picks random color from color list
+ * @param colors array of colors
+ * @returns picked color
+ */
 function randomColor(colors: Array<string>): string {
   return colors[Math.floor(Math.random() * 7)];
 }
 
+/**
+ * Creates predicted balls and puts them on game board
+ * @param prediction array of predicted balls
+ * @returns true if game is lost
+ */
 export function createBalls(prediction: Array<string>): boolean {
   let empty = emptyCells(window.board);
 
@@ -89,6 +113,11 @@ export function createBalls(prediction: Array<string>): boolean {
   return false;
 }
 
+/**
+ * Function that removes balls (ouch!)
+ * @param coords coordinates of starting ball
+ * @param ball Ball object
+ */
 export function removeBalls(coords: coords, ball: Ball) {
   // horizontal
   let points = [ball]
@@ -122,6 +151,10 @@ export function removeBalls(coords: coords, ball: Ball) {
     calcPoints(points);
 }
 
+/** 
+ * Calculates points from removed balls (ouch!)
+ * @param points array of removed balls
+ */
 function calcPoints(points: Array<Ball>) {
   let secondArr: Array<Ball> = [];
 
@@ -140,14 +173,33 @@ function calcPoints(points: Array<Ball>) {
   SCORE_CONTAINER.innerText = `Score: ${window.score}`;
 }
 
+/**
+ * Search function that goes left (or up)
+ * @param coord current coordinates
+ * @param offset current offset
+ * @returns new coordinate
+ */
 function leftSearch(coord: number, offset: number): number {
   return coord - offset;
 }
 
+/**
+ * Search function that goes left (or up)
+ * @param coord current coordinates
+ * @param offset current offset
+ * @returns new coordinate
+ */
 function rightSearch(coord: number, offset: number): number {
   return coord + offset
 }
 
+/**
+ * Finds ball of the same color
+ * @param ball starting ball
+ * @param ySearch search function used for searching i y axis
+ * @param xSearch search function used for searching i x axis
+ * @returns array of found balls
+ */
 function ballSearch(ball: Ball, ySearch: searchFunction, xSearch: searchFunction): Array<Ball> {
   let arr: Array<Ball> = []
 
@@ -164,7 +216,12 @@ function ballSearch(ball: Ball, ySearch: searchFunction, xSearch: searchFunction
   return arr;
 }
 
-function clean(arr: Array<Ball>) {
+/**
+ * Remove balls from board
+ * @param arr array of balls to remove
+ * @returns array of removed balls
+ */
+function clean(arr: Array<Ball>): Array<Ball> {
   let x = false;
 
   if (arr.length >= BALLS_TRESHOLD) {

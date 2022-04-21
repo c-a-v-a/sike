@@ -2,11 +2,16 @@ import type { coords } from './events';
 import { Ball } from './ball';
 import { clickEvent, hoverEvent } from './events'
 
+/** Type for game board */
 export type board = Array<Array<Ball|null>>;
 
 const TABLE = document.getElementById('table') as HTMLTableElement;
 export const BOARD_SIZE = 9;
 
+/**
+ * Creates game board
+ * @returns created game board
+ */
 export function createBoard(): board {
   let board: board = new Array(BOARD_SIZE);
 
@@ -22,6 +27,7 @@ export function createBoard(): board {
   return board;
 }
 
+/** Renders new board with event interactions */
 export function renderBoard() {
   TABLE.innerHTML = '';
 
@@ -62,6 +68,7 @@ export function renderBoard() {
   }
 }
 
+/** Renders new board with no event handles */
 export function renderStaticBoard() {
   TABLE.innerHTML = '';
 
@@ -93,6 +100,11 @@ export function renderStaticBoard() {
   }
 }
 
+/**
+ * Finds empty board cells
+ * @param board game board
+ * @returns empty cells coordinates
+ */
 export function emptyCells(board: board): Array<Array<number>> {
   let arr: Array<Array<number>> = [];
 

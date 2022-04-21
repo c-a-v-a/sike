@@ -3,6 +3,7 @@ import type { coords } from './events';
 import { createBoard, renderBoard } from './board';
 import { getPrediction, createBalls, Ball, renderPredictions } from './ball';
 
+/** Global window interface */
 declare global {
   interface Window {
     startCoords: coords|null;
@@ -27,6 +28,7 @@ let prediction = getPrediction();
 
 mainLoop();
 
+/** Main game loop */
 export function mainLoop() {
   let fail = createBalls(prediction);
 

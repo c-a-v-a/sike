@@ -1,12 +1,14 @@
 import { Ball } from './ball';
 import { BOARD_SIZE, renderBoard } from './board';
 
+/** Type for node */
 type node = {
   x: number,
   y: number,
   step: number,
 }
 
+/** Finds path from start to end coordinates */
 export function findPath() {
   if (!window.startCoords || !window.endCoords) return;
 
@@ -18,6 +20,7 @@ export function findPath() {
   console.log('dsfadsaf')
 }
 
+/** Bfs search */
 function bfs() {
   let visited = [];
   let queue: Array<node> = [{ 
@@ -62,7 +65,13 @@ function bfs() {
   return [];
 }
 
-
+/**
+ * Checks if node is included in visited or queue
+ * @param node checked node
+ * @param visited array of visited nodes
+ * @param queue node queue
+ * @returns true if visited or queue includes node
+ */
 function includesNode(node: node, visited: Array<node>, queue: Array<node>) {
   for (let value of visited)
      if (node.x === value.x && node.y === value.y) return true;
@@ -77,10 +86,20 @@ function includesNode(node: node, visited: Array<node>, queue: Array<node>) {
   return false;
 }
 
+/**
+ * Checks if nodes are connected
+ * @param node first node
+ * @param secondNode second node
+ * @returns true if nodes are connected
+ */
 function isConnected(node: node, secondNode: node) {
   return (Math.abs(node.x - secondNode.x) <= 1 && Math.abs(node.y - secondNode.y) <= 1);
 }
 
+/**
+ * Renders found path
+ * @param arr found path
+ */
 function renderPath(arr: Array<node>) {
   arr.map((value) => {
     let b = window.board[value.y][value.x];
@@ -96,6 +115,7 @@ function renderPath(arr: Array<node>) {
   renderBoard();
 }
 
+/** Clears old path from board */
 export function clearPath() {
   window.board.map((row, iRow) => {
     row.map((value, iCell) => {
